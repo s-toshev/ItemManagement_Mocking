@@ -12,7 +12,7 @@ namespace ItemManagementApp
         static void Main(string[] args)
         {
             // Define the connection string
-            string connectionString = "Server=.;Database=ItemManagement;Trusted_Connection=True;";
+            string connectionString = "Server=DESKTOP-I9FC29P\\SQLEXPRESS;Database=ItemManagement;Trusted_Connection=True;";
 
             // Configure the DbContextOptionsBuilder with the connection string
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
