@@ -11,11 +11,11 @@ namespace ItemManagement.Tests
     [TestFixture]
     public class ItemServiceTests
     {
-     
+
         private ItemService _itemService;
 
         private Mock<IItemRepository> _mockItemRepository;
-        
+
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace ItemManagement.Tests
         public void AddItem_ShouldCallAddItemOnRepository()
         {
             //Arrange
-            var item = new Item {Name = "Test item" };
+            var item = new Item { Name = "Test item" };
             _mockItemRepository.Setup(x => x.AddItem(item));
             //Act
             _itemService.AddItem(item.Name);
@@ -59,7 +59,7 @@ namespace ItemManagement.Tests
         {
             //Arrange
 
-            var items = new List<Item>() { new Item {Id = 1, Name = "SampleItem" } };
+            var items = new List<Item>() { new Item { Id = 1, Name = "SampleItem" } };
             _mockItemRepository.Setup(x => x.GetAllItems()).Returns(items);
             //Act
             var result = _itemService.GetAllItems();
@@ -67,7 +67,7 @@ namespace ItemManagement.Tests
             //Assert
             Assert.NotNull(result);
             Assert.That(result.Count(), Is.EqualTo(1));
-            _mockItemRepository.Verify(x => x.GetAllItems(), Times.Once()); 
+            _mockItemRepository.Verify(x => x.GetAllItems(), Times.Once());
 
         }
 
@@ -84,7 +84,7 @@ namespace ItemManagement.Tests
             //Assert
             Assert.NotNull(result);
             Assert.That(result.Name, Is.EqualTo(item.Name));
-            _mockItemRepository.Verify(x => x.GetItemById(item.Id), Times.Once());  
+            _mockItemRepository.Verify(x => x.GetItemById(item.Id), Times.Once());
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace ItemManagement.Tests
             _itemService.UpdateItem(nonExistingId, "Doesnotmattr");
 
             //Assert
-            _mockItemRepository.Verify(x => x.GetItemById(nonExistingId), Times.Once());    
+            _mockItemRepository.Verify(x => x.GetItemById(nonExistingId), Times.Once());
             _mockItemRepository.Verify(x => x.UpdateItem(It.IsAny<Item>()), Times.Never());
 
 
@@ -143,10 +143,10 @@ namespace ItemManagement.Tests
             var item = new Item { Name = "Sample item", Id = 1 };
             _mockItemRepository.Setup(x => x.GetItemById(item.Id)).Returns(item);
             _mockItemRepository.Setup(x => x.UpdateItem(It.IsAny<Item>())).Throws<ArgumentException>();
-           
+
             //Act&Assert
             Assert.Throws<ArgumentException>(() => _itemService.UpdateItem(item.Id, ""));
-           
+
             _mockItemRepository.Verify(x => x.GetItemById(item.Id), Times.Once());
             _mockItemRepository.Verify(x => x.UpdateItem(It.IsAny<Item>()), Times.Once());
 
@@ -165,42 +165,27 @@ namespace ItemManagement.Tests
             _itemService.DeleteItem(itemId);
 
             //Assert
-            _mockItemRepository.Verify(x => x.DeleteItem(itemId), Times.Once());    
+            _mockItemRepository.Verify(x => x.DeleteItem(itemId), Times.Once());
 
         }
 
-        [Test]
-        public void ValidateItemName_WhenNameIsValid_ShouldReturnTrue()
+        [TestCase("", false)]
+        [TestCase(null, false)]
+        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", false)]
+        [TestCase("A", true)]
+        [TestCase("SampleName", true)]
+        [TestCase("test", true)]
+        public void ValidateItemName_WhenNameIsValid_ShouldReturnTrue(string name, bool isValid)
         {
             //Arrange
 
-
             //Act
-
+            var result = _itemService.ValidateItemName(name);
 
             //Assert
-
-
+            Assert.That(result, Is.EqualTo(isValid));
         }
 
-        [Test]
-        public void ValidateItemName_WhenNameIsTooLong_ShouldReturnFalse()
-        {
-            //Arrange
-
-
-            //Act
-
-
-            //Assert
-
-
-        }
-
-        [Test]
-        public void ValidateItemName_WhenNameIsEmpty_ShouldReturnFalse()
-        {
-            
-        }
+     
     }
 }
