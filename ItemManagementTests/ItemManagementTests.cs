@@ -171,7 +171,7 @@ namespace ItemManagement.Tests
 
         [TestCase("", false)]
         [TestCase(null, false)]
-        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", false)]
+        [TestCase("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", false)]
         [TestCase("A", true)]
         [TestCase("SampleName", true)]
         [TestCase("test", true)]
